@@ -11,23 +11,25 @@ class Post extends Model
      *
      * @var array
      */
+    
     protected $fillable = [
-        'user_id', 'category_id', 'post',
+        'user_id', 'category_id', 'content', 'title'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(\App\Post::class, 'user_id', 'id');
-    }
 
-    public function Comments(){
+    public function comments(){
       // 投稿はたくさんのコメントを持つ
-      return $this->hasMany(\App\Comment::class,, 'post_id');
+      return $this->hasMany(\App\Comment::class, 'post_id');
     }
 
-    public function Category(){
+    public function category(){
       // 投稿は1つのカテゴリーに属する
-      return $this->belongsTo(\App\Category::class,'cat_id');
+      return $this->belongsTo(\App\Category::class,'category_id');
+    }
+
+    public function user(){
+      // 投稿は1つのカテゴリーに属する
+      return $this->belongsTo(\App\User::class,'user_id');
     }
 
 
