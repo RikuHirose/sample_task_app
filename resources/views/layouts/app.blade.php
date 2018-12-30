@@ -80,11 +80,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">board</div>
-
-                            <div class="card-body">
-                                @yield('content')
-                            </div>
+                            @yield('content')
                         </div>
                     </div>
                 </div>

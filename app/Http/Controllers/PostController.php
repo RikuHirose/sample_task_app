@@ -20,12 +20,29 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->get();
-        $posts->load('category');
+        $q = \Request::query();
 
-        return view('posts.index', [
-            'posts' => $posts
-        ]);
+        if($q != []) {
+            $posts = Post::latest()->where('category_id', $q['category_id'])->get();
+            $posts->load('category');
+
+            $search_result = 'カテゴリ: '.$posts[0]['category']['category_name'];
+
+            return view('posts.index', [
+                'posts' => $posts,
+                'search_result'  => $search_result
+            ]);
+
+
+        } else {
+            $posts = Post::latest()->get();
+
+            $posts->load('category');
+            return view('posts.index', [
+                'posts' => $posts
+            ]);
+        }
+
     }
 
     /**
