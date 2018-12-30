@@ -1,12 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card-header">board</div>
+<div class="card-header">{{ $user->name }}の投稿</div>
 
 <div class="card-body">
-    @isset($search_result)
-        <h5 class="card-title">{{ $search_result }}</h5>
-    @endisset
 
     @if (session('status'))
         <div class="alert alert-success" role="alert">
@@ -14,7 +11,7 @@
         </div>
     @endif
     <div class="card">
-        @foreach($posts as $post)
+        @foreach($user->posts as $post)
               <div class="card-body">
                 <h3 class="card-title">{{ $post->title }}</h3>
                 <h6 class="card-subtitle mb-2 text-muted">{{ $post->created_at }}</h6>

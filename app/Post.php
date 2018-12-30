@@ -28,7 +28,6 @@ class Post extends Model
     }
 
     public function user(){
-      // 投稿は1つのカテゴリーに属する
       return $this->belongsTo(\App\User::class,'user_id');
     }
 
