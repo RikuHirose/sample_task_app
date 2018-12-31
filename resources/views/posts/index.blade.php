@@ -1,6 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="card-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title">search field</h5>
+                <div id="custom-search-input">
+                    <div class="input-group col-md-12">
+                        <form action="{{ route('posts.search') }}" method="POST">
+                            {{ csrf_field() }}
+                            <input type="text" class="form-control input-lg" placeholder="search" name="search">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info " type="submit" style="position: relative;top: -37px;right: -179px;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="card-header">board</div>
 
 <div class="card-body">
@@ -35,6 +57,19 @@
               </div>
         @endforeach
     </div>
+
+    @if(isset($search_result))
+        @if(isset($search_flag) && $search_flag == true)
+            {{ $posts->appends(['category_id' => $posts[0]->category_id])->links() }}
+        @else
+            {{ $posts->appends(['category_id' => $posts[0]->category_id])->links() }}
+        @endif
+
+    @elseif(isset($search_result) && $search_flag == false)
+        {{ $posts->links() }}
+    @else
+        {{ $posts->links() }}
+    @endif
 </div>
 
 @endsection

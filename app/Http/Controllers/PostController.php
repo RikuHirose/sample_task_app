@@ -22,8 +22,8 @@ class PostController extends Controller
     {
         $q = \Request::query();
 
-        if($q != []) {
-            $posts = Post::latest()->where('category_id', $q['category_id'])->get();
+        if(isset($q['category_id'])) {
+            $posts = Post::latest()->where('category_id', $q['category_id'])->paginate(5);
             $posts->load('category');
 
             $search_result = 'カテゴリ: '.$posts[0]['category']['category_name'];
@@ -35,7 +35,7 @@ class PostController extends Controller
 
 
         } else {
-            $posts = Post::latest()->get();
+            $posts = Post::latest()->paginate(5);
 
             $posts->load('category');
             return view('posts.index', [
@@ -119,5 +119,34 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $posts = Post::where('content', 'like', "%{$request->search}%")
+                    ->orWhere('title', 'like', "%{$request->search}%")
+                    ->paginate(5);
+
+        if(count($posts) != 0 ) {
+            $search_result = $request->search.'の検索結果'.count($posts).'件';
+            $search_flag = true;
+
+            return view('posts.index', [
+                'posts' => $posts,
+                'search_flag' => $search_flag,
+                'search_result'  => $search_result
+            ]);
+
+        } else {
+            $search_result = $request->search.'の検索結果一件も見つかりませんでした';
+            $search_flag = false;
+
+            return view('posts.index', [
+                'posts' => $posts,
+                'search_flag' => $search_flag,
+                'search_result'  => $search_result
+            ]);
+        }
+
     }
 }
