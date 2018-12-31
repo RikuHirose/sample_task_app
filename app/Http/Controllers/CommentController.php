@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\CommentRequest;
 
-use App\Post;
+use App\Comment;
 
-class PostController extends Controller
+class CommentController extends Controller
 {
-    public function __construct() {
-        
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,29 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $q = \Request::query();
-
-        if($q != []) {
-            $posts = Post::latest()->where('category_id', $q['category_id'])->get();
-            $posts->load('category');
-
-            $search_result = 'カテゴリ: '.$posts[0]['category']['category_name'];
-
-            return view('posts.index', [
-                'posts' => $posts,
-                'search_result'  => $search_result
-            ]);
-
-
-        } else {
-            $posts = Post::latest()->get();
-
-            $posts->load('category');
-            return view('posts.index', [
-                'posts' => $posts
-            ]);
-        }
-
+        //
     }
 
     /**
@@ -52,7 +26,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create', [
+        $post_id = \Request::query();
+        return view('comments.create', [
+            'post_id' => $post_id['post_id']
         ]);
     }
 
@@ -62,14 +38,14 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(CommentRequest $request)
     {
-        $post = new Post;
-        $input = $request->only($post->getFillable());
+        $comment = new Comment;
+        $input = $request->only($comment->getFillable());
 
-        $post = $post->create($input);
+        $comment = $comment->create($input);
 
-        return redirect('/');
+        return redirect('/posts/'.$comment->post_id);
     }
 
     /**
@@ -78,13 +54,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        $post->load('comments.user');
-
-        return view('posts.show', [
-            'post' => $post
-        ]);
+        //
     }
 
     /**

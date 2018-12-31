@@ -19,7 +19,7 @@ class Post extends Model
 
     public function comments(){
       // 投稿はたくさんのコメントを持つ
-      return $this->hasMany(\App\Comment::class, 'post_id');
+      return $this->hasMany(\App\Comment::class, 'post_id', 'id');
     }
 
     public function category(){
